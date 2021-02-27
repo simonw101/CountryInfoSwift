@@ -7,12 +7,17 @@
 
 import UIKit
 
-var flagArray = [String]()
-var countryNameArray = [String]()
-
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    var countryObj = CountryObject()
+    var countryNameArray = [String]()
+    var phoneCodes = [String]()
+    var domainArray = [String]()
+    var capitalArray = [String]()
+    var populationArray = [String]()
+    var demonymArray = [String]()
+    var flagArray = [String]()
+    var languageArray = [String]()
+    var currencyArray = [String]()
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -27,17 +32,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        flagArray.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.textLabel?.text = countryNameArray[indexPath.row]
-        return cell
-    }
-    
     func downloadAndParse() {
+        
+        var counter = 0
         
         if let url = URL(string: "https://restcountries.eu/rest/v2/all") {
             
@@ -59,71 +56,99 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                             
                             //print(jsonResponse)
                             
-                            if let parseData = jsonResponse as? [Any?] {
+                            if let parseData = jsonResponse as? [Any] {
                                 
-                                for item in parseData {
+                                DispatchQueue.main.async {
                                     
-                                    if let country = item as? [String : Any] {
+                                    repeat {
                                         
-                                        DispatchQueue.main.async {
-                                            
-                                            if let flag = country["flag"] as? String {
-                                                
-                                                
-                                                self.countryObj.flagUrl = flag
-                                                
-                                                flagArray.append(self.countryObj.flagUrl)
-                                                
-                                            }
-                                            
-                                            
+                                        if let country = parseData[counter] as? [String: Any] {
                                             
                                             if let countryName = country["name"] as? String {
                                                 
-                                                self.countryObj.countryName = countryName
-                                                
-                                                countryNameArray.append(self.countryObj.countryName)
+                                                self.countryNameArray.append(countryName)
                                                 
                                             }
                                             
-                                            if let currencies = country["currencies"] as? [Any] {
+                                            if let phoneCode = country["callingCodes"] as? [String] {
                                                 
-                                                var tempCurreny = [String]()
-                                                
-                                                for i in 0...currencies.count - 1 {
-                                                    
-                                                    if let currencyList = (currencies[i] as? [String: Any]) {
-                                                        
-                                                        if let currencyNames = currencyList["name"] as? String {
-                                                            
-                                                            //print(currencyNames)
-                                                            
-                                                            tempCurreny.append(currencyNames)
-                                                            
-                                                            self.countryObj.currency = tempCurreny
-                                                            
-                                                        }
-                                                        
-                                                    }
-                                                    
-                                                    
-                                                }
-                                                
-                                                for item in self.countryObj.currency {
-                                                    
-                                                    print(item)
-                                                    
-                                                }
-                                                
+                                                self.phoneCodes.append(phoneCode[0])
                                                 
                                             }
                                             
+                                            if let domainCode = country["topLevelDomain"] as? [String] {
+                                                
+                                                self.domainArray.append(domainCode[0])
+                                                
+                                            }
                                             
-                                            self.tableView.reloadData()
+                                            if let capital = country["capital"] as? String {
+                                                
+                                                if capital == "" {
+                                                    
+                                                    self.capitalArray.append("N/A")
+                                                    
+                                                } else {
+                                                
+                                                self.capitalArray.append(capital)
+                                                    
+                                                }
+                                                
+                                            }
+                                            
+                                            if let population = country["population"] as? Double {
+                                                
+                                                let numberFormatter = NumberFormatter()
+                                                numberFormatter.numberStyle = .decimal
+                                                let formattedNumber = numberFormatter.string(from: NSNumber(value:population))
+                                                    
+                                                if let number = formattedNumber {
+                                                    
+                                                self.populationArray.append(number)
+                                                    
+                                                }
+                                          
+                                                
+                                            }
+                                            
+                                            if let demonym = country["demonym"] as? String {
+                                                
+                                                if demonym == "" {
+                                                    
+                                                    self.demonymArray.append("N/A")
+                                                    
+                                                } else {
+                                                
+                                                self.demonymArray.append(demonym)
+                                                    
+                                                }
+                                                
+                                            }
+                                            
+                                            if let flagUrl = country["flag"] as? String {
+                                                
+                                                self.flagArray.append(flagUrl)
+                                                
+                                            }
+                                            
+//                                            if let currency = country["currencies"] as? [Any] {
+//
+//                                                for i in 0...(currency.count - 1) {
+//
+//                                                   print(currency[i])
+//
+//                                                }
+//
+//                                            }
+                                            
                                             
                                         }
                                         
-                                    }
+                                        counter += 1
+                                        
+                                    } while counter <= (parseData.count - 1)
+                                    
+                                    self.tableView.reloadData()
                                     
                                 }
                                 
@@ -135,9 +160,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                             
                         }
                         
+                        
                     }
                     
+                    
                 }
+                
                 
                 
             }
@@ -146,11 +174,23 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             
         }
         
-        
     }
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        countryNameArray.count
+    }
     
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell()
+        cell.textLabel?.text = "\(demonymArray[indexPath.row])"
+        return cell
+    }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        performSegue(withIdentifier: "toDetailVC", sender: nil)
+        
+    }
     
 }
 
