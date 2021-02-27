@@ -12,6 +12,8 @@ var countryNameArray = [String]()
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    var countryObj = CountryObject()
+    
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
@@ -43,9 +45,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             
             let task = session.dataTask(with: url) { (data, response, error) in
                 
-                if error != nil {
+                if let error = error {
                     
-                    print(error?.localizedDescription)
+                    print(error.localizedDescription)
                     
                 } else {
                     
@@ -64,18 +66,58 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                                     if let country = item as? [String : Any] {
                                         
                                         DispatchQueue.main.async {
-                                           
-                                            if let flagURL = country["flag"] as? String {
+                                            
+                                            if let flag = country["flag"] as? String {
                                                 
-                                                flagArray.append(flagURL)
+                                                
+                                                self.countryObj.flagUrl = flag
+                                                
+                                                flagArray.append(self.countryObj.flagUrl)
                                                 
                                             }
                                             
+                                            
+                                            
                                             if let countryName = country["name"] as? String {
                                                 
-                                                countryNameArray.append(countryName)
+                                                self.countryObj.countryName = countryName
+                                                
+                                                countryNameArray.append(self.countryObj.countryName)
                                                 
                                             }
+                                            
+                                            if let currencies = country["currencies"] as? [Any] {
+                                                
+                                                var tempCurreny = [String]()
+                                                
+                                                for i in 0...currencies.count - 1 {
+                                                    
+                                                    if let currencyList = (currencies[i] as? [String: Any]) {
+                                                        
+                                                        if let currencyNames = currencyList["name"] as? String {
+                                                            
+                                                            //print(currencyNames)
+                                                            
+                                                            tempCurreny.append(currencyNames)
+                                                            
+                                                            self.countryObj.currency = tempCurreny
+                                                            
+                                                        }
+                                                        
+                                                    }
+                                                    
+                                                    
+                                                }
+                                                
+                                                for item in self.countryObj.currency {
+                                                    
+                                                    print(item)
+                                                    
+                                                }
+                                                
+                                                
+                                            }
+                                            
                                             
                                             self.tableView.reloadData()
                                             
@@ -108,4 +150,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     
+    
+    
 }
+

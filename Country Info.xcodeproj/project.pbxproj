@@ -14,6 +14,7 @@
 		65F7C3AD25E9C681009D3D0E /* Country_Info.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 65F7C3AB25E9C681009D3D0E /* Country_Info.xcdatamodeld */; };
 		65F7C3AF25E9C683009D3D0E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 65F7C3AE25E9C683009D3D0E /* Assets.xcassets */; };
 		65F7C3B225E9C683009D3D0E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 65F7C3B025E9C683009D3D0E /* LaunchScreen.storyboard */; };
+		65F7C3BB25EA47D4009D3D0E /* CountryObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F7C3BA25EA47D4009D3D0E /* CountryObject.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		65F7C3AE25E9C683009D3D0E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		65F7C3B125E9C683009D3D0E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		65F7C3B325E9C683009D3D0E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		65F7C3BA25EA47D4009D3D0E /* CountryObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryObject.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 				65F7C3B025E9C683009D3D0E /* LaunchScreen.storyboard */,
 				65F7C3B325E9C683009D3D0E /* Info.plist */,
 				65F7C3AB25E9C681009D3D0E /* Country_Info.xcdatamodeld */,
+				65F7C3BA25EA47D4009D3D0E /* CountryObject.swift */,
 			);
 			path = "Country Info";
 			sourceTree = "<group>";
@@ -142,6 +145,7 @@
 			files = (
 				65F7C3AD25E9C681009D3D0E /* Country_Info.xcdatamodeld in Sources */,
 				65F7C3A725E9C681009D3D0E /* ViewController.swift in Sources */,
+				65F7C3BB25EA47D4009D3D0E /* CountryObject.swift in Sources */,
 				65F7C3A325E9C681009D3D0E /* AppDelegate.swift in Sources */,
 				65F7C3A525E9C681009D3D0E /* SceneDelegate.swift in Sources */,
 			);
