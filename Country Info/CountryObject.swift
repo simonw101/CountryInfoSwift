@@ -15,8 +15,8 @@ class CountryObject {
     var capital: String = ""
     var population: String = ""
     var demonym: String = ""
-    var currency = [String]()
-    var languages = [String]()
+    var currency = [Any]()
+    var languages = [Any]()
     var flagUrl: String = ""
     
     

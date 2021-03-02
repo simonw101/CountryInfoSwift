@@ -6,18 +6,11 @@
 //
 
 import UIKit
+import SDWebImageSVGCoder
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    var countryNameArray = [String]()
-    var phoneCodes = [String]()
-    var domainArray = [String]()
-    var capitalArray = [String]()
-    var populationArray = [String]()
-    var demonymArray = [String]()
-    var flagArray = [String]()
-    var languageArray = [String]()
-    var currencyArray = [String]()
+    var countryArray = [CountryObject]()
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -54,99 +47,132 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                             
                             let jsonResponse = try JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers)
                             
-                            //print(jsonResponse)
-                            
                             if let parseData = jsonResponse as? [Any] {
                                 
                                 DispatchQueue.main.async {
                                     
                                     repeat {
                                         
+                                        let countryObj = CountryObject()
+                                        
                                         if let country = parseData[counter] as? [String: Any] {
                                             
                                             if let countryName = country["name"] as? String {
                                                 
-                                                self.countryNameArray.append(countryName)
-                                                
-                                            }
-                                            
-                                            if let phoneCode = country["callingCodes"] as? [String] {
-                                                
-                                                self.phoneCodes.append(phoneCode[0])
-                                                
-                                            }
-                                            
-                                            if let domainCode = country["topLevelDomain"] as? [String] {
-                                                
-                                                self.domainArray.append(domainCode[0])
-                                                
-                                            }
-                                            
-                                            if let capital = country["capital"] as? String {
-                                                
-                                                if capital == "" {
+                                                if let domain = country["topLevelDomain"] as? [Any] {
                                                     
-                                                    self.capitalArray.append("N/A")
+                                                    if let domainCode = domain[0] as? String {
+                                                        
+                                                        if let phoneCode = country["callingCodes"] as? [Any] {
+                                                            
+                                                            if let code = phoneCode[0] as? String {
+                                                                
+                                                                if let capitalCity = country["capital"] as? String {
+                                                                    
+                                                                    if let population = country["population"] as? Int {
+                                                                        
+                                                                        if capitalCity == "" {
+                                                                            
+                                                                            countryObj.capital = "N/A"
+                                                                            
+                                                                        } else {
+                                                                            
+                                                                            countryObj.capital = capitalCity
+                                                                            
+                                                                        }
+                                                          
+                                                                        if code == "" {
+                                                                            
+                                                                            countryObj.phoneCode = "N/A"
+                                                                            
+                                                                        } else {
+                                                                            
+                                                                            countryObj.phoneCode = code
+                                                                            
+                                                                        }
+                                                                        
+                                                                        countryObj.domainName = domainCode
+                                                                        countryObj.countryName = countryName
+                                                                        
+                                                                        let largeNumber = population
+                                                                        let numberFormatter = NumberFormatter()
+                                                                        numberFormatter.numberStyle = .decimal
+                                                                        let formattedNumber = numberFormatter.string(from: NSNumber(value:largeNumber))
+                                                                        
+                                                                        if let convertedPop = formattedNumber {
+                                                                            
+                                                                            countryObj.population = convertedPop
+                                                                            
+                                                                        }
+                                                                        
+                                                                        if let flagURL = country["flag"] as? String {
+                                                                            
+                                                                            if flagURL == "" {
+                                                                                
+                                                                                countryObj.flagUrl = ""
+                                                                                
+                                                                            } else {
+                                                                                
+                                                                                countryObj.flagUrl = flagURL
+                                                                                
+                                                                                
+                                                                            }
+                                                                            
+                                                                            
+                                                                            
+                                                                        }
+                                                                        
+                                                                        if let demonym = country["demonym"] as? String {
+                                                                            
+                                                                            if demonym == "" {
+                                                                                
+                                                                                countryObj.demonym = "N/A"
+                                                                            } else {
+                                                                                
+                                                                                countryObj.demonym = demonym
+                                                                            }
                                                     
-                                                } else {
-                                                
-                                                self.capitalArray.append(capital)
+                                                                            
+                                                                        }
+                                                                        
+                                                                        if let currencyArray = country["currencies"] as? [Any] {
+                                                                            
+                                                                            countryObj.currency = currencyArray
+                                                                                
+                                                                            
+                                                                        }
+                                                                        
+                                                                        if let languageArray = country["languages"] as? [Any] {
+                                                                            
+                                                                            countryObj.languages = languageArray
+                                                                            
+                                                                        }
+
+                                                                        
+                                                                    }
+                                                                    
+                                                                }
+                                                                
+                                                                
+                                                            }
+                                                            
+                                                        }
+                                                        
+                                                    }
+                                                    
                                                     
                                                 }
                                                 
                                             }
-                                            
-                                            if let population = country["population"] as? Double {
-                                                
-                                                let numberFormatter = NumberFormatter()
-                                                numberFormatter.numberStyle = .decimal
-                                                let formattedNumber = numberFormatter.string(from: NSNumber(value:population))
-                                                    
-                                                if let number = formattedNumber {
-                                                    
-                                                self.populationArray.append(number)
-                                                    
-                                                }
-                                          
-                                                
-                                            }
-                                            
-                                            if let demonym = country["demonym"] as? String {
-                                                
-                                                if demonym == "" {
-                                                    
-                                                    self.demonymArray.append("N/A")
-                                                    
-                                                } else {
-                                                
-                                                self.demonymArray.append(demonym)
-                                                    
-                                                }
-                                                
-                                            }
-                                            
-                                            if let flagUrl = country["flag"] as? String {
-                                                
-                                                self.flagArray.append(flagUrl)
-                                                
-                                            }
-                                            
-//                                            if let currency = country["currencies"] as? [Any] {
-//
-//                                                for i in 0...(currency.count - 1) {
-//
-//                                                   print(currency[i])
-//
-//                                                }
-//
-//                                            }
                                             
                                             
                                         }
                                         
                                         counter += 1
                                         
-                                    } while counter <= (parseData.count - 1)
+                                        self.countryArray.append(countryObj)
+                                        
+                                    } while counter <= parseData.count - 1
                                     
                                     self.tableView.reloadData()
                                     
@@ -156,10 +182,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                             
                         } catch {
                             
-                            print("unable to access json")
+                            
                             
                         }
-                        
                         
                     }
                     
@@ -177,19 +202,55 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        countryNameArray.count
+        countryArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.textLabel?.text = "\(demonymArray[indexPath.row])"
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! CountryTableViewCell
+        
+        let SVGCoder = SDImageSVGCoder.shared
+        SDImageCodersManager.shared.addCoder(SVGCoder)
+        
+        if let url = URL(string: countryArray[indexPath.row].flagUrl) {
+        
+            cell.flagImage.sd_setImage(with: url, completed: nil)
+            
+        } else {
+            
+            cell.flagImage.image = UIImage(named: "placeholderimage")
+            
+        }
+       
+        
+        cell.countryName.text = countryArray[indexPath.row].countryName
+        cell.capitalLabel.text = "Capital: \(countryArray[indexPath.row].capital)"
+        cell.populationLabel.text = "Population: \(countryArray[indexPath.row].population)"
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        performSegue(withIdentifier: "toDetailVC", sender: nil)
+        let chosenCountry = countryArray[indexPath.row]
         
+        performSegue(withIdentifier: "toDetailVC", sender: chosenCountry)
+        
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 200.0
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toDetailVC" {
+            
+            if let detailsVC = segue.destination as? DetailViewController {
+                
+                detailsVC.selectedCountry = sender as? CountryObject
+                
+            }
+            
+        }
     }
     
 }
