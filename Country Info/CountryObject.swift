@@ -10,13 +10,15 @@ import Foundation
 class CountryObject {
     
     var countryName: String = ""
-    var domainName: String = ""
-    var phoneCode: String = ""
-    var capital: String = ""
-    var population: String = ""
-    var demonym: String = ""
-    var currency = [Any]()
-    var languages = [Any]()
+    var region: String = ""
+    var nativeName: String = ""
+    var areaOfCountry: Int = 0
+    var lat: String = ""
+    var long: String = ""
+    var currencyCode: String = ""
+    var currencyName: String = ""
+    var currencySymbol: String = ""
+    var languages: String = ""
     var flagUrl: String = ""
     
     

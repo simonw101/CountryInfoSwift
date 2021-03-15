@@ -17,14 +17,16 @@ class DetailViewController: UIViewController {
         if let country = selectedCountry {
             
             print(country.countryName)
-            print(country.phoneCode)
-            print(country.domainName)
-            print(country.capital)
-            print(country.population)
-            print(country.demonym)
+            print(country.areaOfCountry)
+            print(country.region)
             print(country.flagUrl)
+            print(country.lat)
+            print(country.long)
             print(country.languages)
-            print(country.currency)
+            print(country.currencyCode)
+            print(country.currencySymbol)
+            print(country.currencyName)
+            print(country.nativeName)
             
         }
         
